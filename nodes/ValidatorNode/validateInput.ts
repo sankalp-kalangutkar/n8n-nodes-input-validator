@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
 import { InputField } from './types';
-import { schemas } from './schemas'; // Import schemas
+import { schemas } from './schemas';
 
 const ajv = new Ajv();
 
@@ -48,7 +48,7 @@ export function validateInputFields(inputFields: InputField[]) {
 			numberData,
 			booleanData,
 			stringFormat,
-			numberValidationType, // Add this line
+			numberValidationType,
 			minValue,
 			maxValue,
 		} = inputField;
