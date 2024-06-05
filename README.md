@@ -1,6 +1,6 @@
-# Input Validator Node
+# n8n-nodes-input-validator
 
-The **Input Validator Node** is a powerful tool designed to validate input data against specified criteria. It supports multiple data types, including strings, numbers, booleans, dates, and enums, and offers various validation options to ensure data integrity.
+The **n8n-nodes-input-validator** is a powerful tool designed to validate input data against specified criteria. It supports multiple data types, including strings, numbers, booleans, dates, and enums, and offers various validation options to ensure data integrity.
 
 ## Features
 
