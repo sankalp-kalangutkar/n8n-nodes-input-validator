@@ -84,6 +84,7 @@ The node returns a JSON object with the following structure:
         }
     ]
 }
+```
 
 - **isValid**: Indicates whether all validations passed.
 - **errors**: An array of error messages for failed validations.
