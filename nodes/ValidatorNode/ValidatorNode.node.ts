@@ -17,6 +17,7 @@ export class ValidatorNode implements INodeType {
 		defaults: {
 			name: 'Validator Node',
 		},
+		icon:"file:validation.svg",
 		inputs: ['main'],
 		outputs: ['main'],
 		properties: [
