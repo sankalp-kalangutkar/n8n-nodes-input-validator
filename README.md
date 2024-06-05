@@ -1,6 +1,6 @@
-# Validator Node
+# Input Validator Node
 
-The **Validator Node** is a powerful tool designed to validate input data against specified criteria. It supports multiple data types, including strings, numbers, booleans, dates, and enums, and offers various validation options to ensure data integrity.
+The **Input Validator Node** is a powerful tool designed to validate input data against specified criteria. It supports multiple data types, including strings, numbers, booleans, dates, and enums, and offers various validation options to ensure data integrity.
 
 ## Features
 
