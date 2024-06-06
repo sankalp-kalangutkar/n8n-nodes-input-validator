@@ -1,3 +1,4 @@
+import { URL } from 'url';
 import Ajv from 'ajv';
 import { InputField } from './types';
 import { schemas } from './schemas';
