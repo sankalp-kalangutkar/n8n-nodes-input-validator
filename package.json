@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-input-validator",
+  "name": "@cdmx/n8n-nodes-input-validator",
   "version": "1.0.0",
   "description": "",
   "keywords": [
@@ -8,9 +8,9 @@
   "license": "MIT",
   "homepage": "https://github.com/cdmx1/n8n-nodes-input-validator#readme",
   "author": {
-    "name": "",
-    "email": ""
-  },
+    "name": "cdmx1",
+    "url": "https://github.com/cdmx1"
+},
   "repository": {
     "type": "git",
     "url": "https://github.com/cdmx1/n8n-nodes-input-validator.git"
