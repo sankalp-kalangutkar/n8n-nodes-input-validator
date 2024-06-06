@@ -10,7 +10,7 @@
   "author": {
     "name": "cdmx1",
     "url": "https://github.com/cdmx1"
-},
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/cdmx1/n8n-nodes-input-validator.git"
@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "@types/node": "^20.14.2",
     "@typescript-eslint/parser": "~5.45",
     "eslint-plugin-n8n-nodes-base": "^1.11.0",
     "gulp": "^4.0.2",
