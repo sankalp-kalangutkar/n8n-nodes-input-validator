@@ -32,6 +32,14 @@ class ValidatorNode {
                             displayName: 'Input Fields',
                             values: [
                                 {
+                                    displayName: 'Validation Name',
+                                    name: 'name',
+                                    type: 'string',
+                                    default: '',
+                                    placeholder: 'Enter validation name',
+                                    description: 'Name of the validation',
+                                },
+                                {
                                     displayName: 'Validation Type',
                                     name: 'validationType',
                                     type: 'options',
