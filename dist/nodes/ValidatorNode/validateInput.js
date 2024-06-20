@@ -46,7 +46,7 @@ function validateInputFields(inputFields) {
                 valueToValidate = stringData || '';
                 if (required && valueToValidate === '') {
                     isValidForType = false;
-                    errorsForType.push({ message: `${name} cannot be empty` });
+                    errorsForType.push({ message: `${name}: String cannot be empty` });
                 }
                 else if (stringFormat === 'email' && !ajv.validate(schemas_1.schemas.email, valueToValidate)) {
                     isValidForType = false;
@@ -55,7 +55,7 @@ function validateInputFields(inputFields) {
                 else if (stringFormat === 'url') {
                     if (required && valueToValidate === '') {
                         isValidForType = false;
-                        errorsForType.push({ message: `${name} cannot be empty` });
+                        errorsForType.push({ message: `${name}: URL cannot be empty` });
                     }
                     else if (valueToValidate !== '' && !ajv.validate(schemas_1.schemas.url, valueToValidate)) {
                         isValidForType = false;
