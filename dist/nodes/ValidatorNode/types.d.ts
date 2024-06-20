@@ -1,4 +1,5 @@
 export interface InputField {
+    name: string;
     validationType: 'string' | 'number' | 'boolean' | 'date' | 'enum';
     required: boolean;
     stringData?: string;
