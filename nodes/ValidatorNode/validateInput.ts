@@ -64,14 +64,14 @@ export function validateInputFields(inputFields: InputField[]) {
                 valueToValidate = stringData || '';
                 if (required && valueToValidate === '') {
                     isValidForType = false;
-                    errorsForType.push({ message: `${name} cannot be empty` });
+                    errorsForType.push({ message: `${name}: String cannot be empty` });
                 } else if (stringFormat === 'email' && !ajv.validate(schemas.email, valueToValidate)) {
                     isValidForType = false;
                     errorsForType.push({ message: `${name}: Invalid email format` });
                 } else if (stringFormat === 'url') {
                     if (required && valueToValidate === '') {
                         isValidForType = false;
-                        errorsForType.push({ message: `${name} cannot be empty` });
+                        errorsForType.push({ message: `${name}: URL cannot be empty` });
                     } else if (valueToValidate !== '' && !ajv.validate(schemas.url, valueToValidate)) {
                         isValidForType = false;
                         errorsForType.push({ message: `${name}: Invalid URL format` });
@@ -170,5 +170,6 @@ export function validateInputFields(inputFields: InputField[]) {
 
     return { isValid, errors };
 }
+
 
 
