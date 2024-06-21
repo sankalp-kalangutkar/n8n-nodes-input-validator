@@ -13,7 +13,7 @@ class ValidatorNode {
             defaults: {
                 name: 'Validator Node',
             },
-            icon: "file:validation.svg",
+            icon: 'file:validation.svg',
             inputs: ['main'],
             outputs: ['main'],
             properties: [
