@@ -37,7 +37,7 @@ function validateInputFields(inputFields) {
     let isValid = true;
     let errors = [];
     inputFields.forEach((inputField) => {
-        const { validationType, required, useRegex, pattern, dateData, enumValues, stringData, numberData, booleanData, stringFormat, numberValidationType, minValue, maxValue, } = inputField;
+        const { validationType, required, pattern, dateData, enumValues, stringData, numberData, booleanData, stringFormat, numberValidationType, minValue, maxValue, } = inputField;
         let valueToValidate;
         let isValidForType = true;
         let errorsForType = [];
