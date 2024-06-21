@@ -80,6 +80,7 @@ The node returns a JSON object with the following structure:
     "isValid": true,
     "errors": [
         {
+						"field":field_name,
             "message": "Error message"
         }
     ]
