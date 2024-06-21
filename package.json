@@ -1,6 +1,6 @@
 {
   "name": "@cdmx/n8n-nodes-input-validator",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "keywords": [
     "n8n-community-node-package"
