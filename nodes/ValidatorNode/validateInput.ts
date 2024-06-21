@@ -41,7 +41,6 @@ export function validateInputFields(inputFields: InputField[]) {
 		const {
 			validationType,
 			required,
-			useRegex,
 			pattern,
 			dateData,
 			enumValues,
@@ -89,7 +88,7 @@ export function validateInputFields(inputFields: InputField[]) {
 						isValidForType = false;
 						errorsForType.push({ message: 'Invalid UUID format' });
 					}
-				} else if (stringFormat === 'pattern' && useRegex && pattern) {
+				} else if (stringFormat === 'pattern' && pattern) {
 					const regex = new RegExp(pattern);
 					if (!regex.test(valueToValidate)) {
 						isValidForType = false;
