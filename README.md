@@ -53,7 +53,7 @@ Here's an example of how to configure the Validator Node:
 4. **Date Validation**
     - **Validation Type**: `date`
     - **Required**: `true`
-    - **Date Data**: `2024-06-05T14:48:00.000Z`
+    - **Date Data**: `2024-06-05`
 
 5. **Enum Validation**
     - **Validation Type**: `enum`

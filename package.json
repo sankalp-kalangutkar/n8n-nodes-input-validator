@@ -1,6 +1,6 @@
 {
   "name": "@cdmx/n8n-nodes-input-validator",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "",
   "keywords": [
     "n8n-community-node-package"
@@ -30,8 +30,7 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "nodes": [
-      "dist/nodes/ValidatorNode/ValidatorNode.node.js",
-      "dist/nodes/CustomTrigger/CustomTrigger.node.js"
+      "dist/nodes/ValidatorNode/ValidatorNode.node.js"
     ]
   },
   "devDependencies": {
