@@ -1,6 +1,6 @@
 {
   "name": "@cdmx/n8n-nodes-input-validator",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "",
   "keywords": [
     "n8n-community-node-package"
@@ -30,13 +30,13 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "nodes": [
-      "dist/nodes/ValidatorNode/ValidatorNode.node.js"
+      "dist/nodes/ValidatorNode/ValidatorNode.node.js",
+      "dist/nodes/CustomTrigger/CustomTrigger.node.js"
     ]
   },
-  
   "devDependencies": {
     "@types/node": "^20.14.2",
-    "@typescript-eslint/parser": "~5.45", 
+    "@typescript-eslint/parser": "~5.45",
     "eslint-plugin-n8n-nodes-base": "^1.11.0",
     "gulp": "^4.0.2",
     "n8n-workflow": "*",
@@ -47,6 +47,7 @@
     "n8n-workflow": "*"
   },
   "dependencies": {
-    "ajv": "^8.16.0"
+    "ajv": "^8.16.0",
+    "ajv-formats": "^3.0.1"
   }
 }

@@ -4,39 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateInputFields = void 0;
-const url_1 = require("url");
 const ajv_1 = __importDefault(require("ajv"));
+const ajv_formats_1 = __importDefault(require("ajv-formats"));
 const ajv = new ajv_1.default();
-ajv.addFormat('date-time', {
-    validate: (dateString) => !isNaN(Date.parse(dateString)),
-});
-ajv.addFormat('email', {
-    type: 'string',
-    validate: (email) => /\S+@\S+\.\S+/.test(email),
-});
-ajv.addFormat('url', {
-    type: 'string',
-    validate: (url) => {
-        try {
-            new url_1.URL(url);
-            return true;
-        }
-        catch (_) {
-            return false;
-        }
-    },
-});
-ajv.addFormat('uuid', {
-    validate: (uuid) => {
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-        return uuidRegex.test(uuid);
-    },
-});
+(0, ajv_formats_1.default)(ajv);
 const schemas = {
     email: { type: 'string', format: 'email' },
-    url: { type: 'string', format: 'url' },
+    url: { type: 'string', format: 'uri' },
     uuid: { type: 'string', format: 'uuid' },
-    date: { type: 'string', format: 'date-time' },
+    date: { type: 'string', format: 'date' },
 };
 function validateInputFields(inputFields) {
     let isValid = true;
@@ -101,14 +77,18 @@ function validateInputFields(inputFields) {
                             if (minValue !== undefined && valueToValidate < minValue) {
                                 isValidForType = false;
                                 errorsForType.push({
-                                    field: name, message: `Value must be greater than or equal to ${minValue}`,
+                                    field: name,
+                                    message: `Value must be greater than or equal to ${minValue}`,
                                 });
                             }
                             break;
                         case 'max':
                             if (maxValue !== undefined && valueToValidate > maxValue) {
                                 isValidForType = false;
-                                errorsForType.push({ field: name, message: `Value must be less than or equal to ${maxValue}` });
+                                errorsForType.push({
+                                    field: name,
+                                    message: `Value must be less than or equal to ${maxValue}`,
+                                });
                             }
                             break;
                         case 'range':
@@ -116,7 +96,8 @@ function validateInputFields(inputFields) {
                                 (maxValue !== undefined && valueToValidate > maxValue)) {
                                 isValidForType = false;
                                 errorsForType.push({
-                                    field: name, message: `Value must be between ${minValue} and ${maxValue}`,
+                                    field: name,
+                                    message: `Value must be between ${minValue} and ${maxValue}`,
                                 });
                             }
                             break;
