@@ -239,7 +239,7 @@ export class ValidatorNode implements INodeType {
 
 		const outputMode = this.getNodeParameter('nodeMode', 0);
 
-        const returnData: INodeExecutionData[] = [];
+		const returnData: INodeExecutionData[] = [];
 		for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
 			const item: INodeExecutionData = items[itemIndex];
 			const inputFields = this.getNodeParameter(
