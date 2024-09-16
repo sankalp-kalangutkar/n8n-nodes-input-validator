@@ -1,6 +1,6 @@
 {
     "name": "@cdmx/n8n-nodes-input-validator",
-    "version": "1.0.4",
+    "version": "1.0.8",
     "description": "",
     "keywords": [
         "n8n-community-node-package"
@@ -46,6 +46,7 @@
         "n8n-workflow": "*"
     },
     "dependencies": {
-        "ajv": "^8.16.0"
+        "ajv": "^8.16.0",
+        "ajv-formats": "^3.0.1"
     }
 }

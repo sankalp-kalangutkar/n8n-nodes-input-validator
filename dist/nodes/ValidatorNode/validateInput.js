@@ -4,40 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateInputFields = void 0;
-const url_1 = require("url");
 const ajv_1 = __importDefault(require("ajv"));
-const schemas_1 = require("./schemas");
+const ajv_formats_1 = __importDefault(require("ajv-formats"));
 const ajv = new ajv_1.default();
-ajv.addFormat('date-time', {
-    validate: (dateString) => !isNaN(Date.parse(dateString)),
-});
-ajv.addFormat('email', {
-    type: 'string',
-    validate: (email) => /\S+@\S+\.\S+/.test(email),
-});
-ajv.addFormat('url', {
-    type: 'string',
-    validate: (url) => {
-        try {
-            new url_1.URL(url);
-            return true;
-        }
-        catch (_) {
-            return false;
-        }
-    },
-});
-ajv.addFormat('uuid', {
-    validate: (uuid) => {
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-        return uuidRegex.test(uuid);
-    },
-});
+(0, ajv_formats_1.default)(ajv);
+const schemas = {
+    email: { type: 'string', format: 'email' },
+    url: { type: 'string', format: 'uri' },
+    uuid: { type: 'string', format: 'uuid' },
+    date: { type: 'string', format: 'date' },
+};
 function validateInputFields(inputFields) {
     let isValid = true;
     let errors = [];
     inputFields.forEach((inputField) => {
-        const { validationType, required, pattern, dateData, enumValues, stringData, numberData, booleanData, stringFormat, numberValidationType, minValue, maxValue, } = inputField;
+        const { name, validationType, required, pattern, dateData, enumValues, stringData, numberData, booleanData, stringFormat, numberValidationType, minValue, maxValue, } = inputField;
         let valueToValidate;
         let isValidForType = true;
         let errorsForType = [];
@@ -46,45 +27,37 @@ function validateInputFields(inputFields) {
                 valueToValidate = stringData || '';
                 if (required && valueToValidate === '') {
                     isValidForType = false;
-                    errorsForType.push({ message: 'String cannot be empty' });
+                    errorsForType.push({ field: name, message: 'String cannot be empty' });
                 }
-                else if (stringFormat === 'email' && !ajv.validate(schemas_1.schemas.email, valueToValidate)) {
+                else if (stringFormat === 'email' && !ajv.validate(schemas.email, valueToValidate)) {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Invalid email format' });
+                    errorsForType.push({ field: name, message: 'Invalid email format' });
                 }
                 else if (stringFormat === 'url') {
                     if (required && valueToValidate === '') {
                         isValidForType = false;
-                        errorsForType.push({ message: 'URL cannot be empty' });
+                        errorsForType.push({ field: name, message: 'URL cannot be empty' });
                     }
-                    else if (valueToValidate !== '' && !ajv.validate(schemas_1.schemas.url, valueToValidate)) {
+                    else if (valueToValidate !== '' && !ajv.validate(schemas.url, valueToValidate)) {
                         isValidForType = false;
-                        errorsForType.push({ message: 'Invalid URL format' });
-                    }
-                    else if (!ajv.validate(schemas_1.schemas.url, valueToValidate)) {
-                        isValidForType = false;
-                        errorsForType.push({ message: 'Invalid URL format' });
+                        errorsForType.push({ field: name, message: 'Invalid URL format' });
                     }
                 }
                 else if (stringFormat === 'uuid') {
                     if (required && valueToValidate === '') {
                         isValidForType = false;
-                        errorsForType.push({ message: 'UUID cannot be empty' });
+                        errorsForType.push({ field: name, message: 'UUID cannot be empty' });
                     }
-                    else if (valueToValidate !== '' && !ajv.validate(schemas_1.schemas.uuid, valueToValidate)) {
+                    else if (valueToValidate !== '' && !ajv.validate(schemas.uuid, valueToValidate)) {
                         isValidForType = false;
-                        errorsForType.push({ message: 'Invalid UUID format' });
-                    }
-                    else if (!ajv.validate(schemas_1.schemas.uuid, valueToValidate)) {
-                        isValidForType = false;
-                        errorsForType.push({ message: 'Invalid UUID format' });
+                        errorsForType.push({ field: name, message: 'Invalid UUID format' });
                     }
                 }
                 else if (stringFormat === 'pattern' && pattern) {
                     const regex = new RegExp(pattern);
                     if (!regex.test(valueToValidate)) {
                         isValidForType = false;
-                        errorsForType.push({ message: `Value does not match pattern: ${pattern}` });
+                        errorsForType.push({ field: name, message: `Value does not match pattern: ${pattern}` });
                     }
                 }
                 break;
@@ -92,11 +65,11 @@ function validateInputFields(inputFields) {
                 valueToValidate = numberData;
                 if (required && (valueToValidate === undefined || valueToValidate === null)) {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Value must be a number' });
+                    errorsForType.push({ field: name, message: 'Value must be a number' });
                 }
                 else if (valueToValidate !== undefined && isNaN(valueToValidate)) {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Value must be a valid number' });
+                    errorsForType.push({ field: name, message: 'Value must be a valid number' });
                 }
                 else {
                     switch (numberValidationType) {
@@ -104,6 +77,7 @@ function validateInputFields(inputFields) {
                             if (minValue !== undefined && valueToValidate < minValue) {
                                 isValidForType = false;
                                 errorsForType.push({
+                                    field: name,
                                     message: `Value must be greater than or equal to ${minValue}`,
                                 });
                             }
@@ -111,7 +85,10 @@ function validateInputFields(inputFields) {
                         case 'max':
                             if (maxValue !== undefined && valueToValidate > maxValue) {
                                 isValidForType = false;
-                                errorsForType.push({ message: `Value must be less than or equal to ${maxValue}` });
+                                errorsForType.push({
+                                    field: name,
+                                    message: `Value must be less than or equal to ${maxValue}`,
+                                });
                             }
                             break;
                         case 'range':
@@ -119,6 +96,7 @@ function validateInputFields(inputFields) {
                                 (maxValue !== undefined && valueToValidate > maxValue)) {
                                 isValidForType = false;
                                 errorsForType.push({
+                                    field: name,
                                     message: `Value must be between ${minValue} and ${maxValue}`,
                                 });
                             }
@@ -130,18 +108,18 @@ function validateInputFields(inputFields) {
                 valueToValidate = booleanData;
                 if (required && valueToValidate === undefined) {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Value must be a boolean' });
+                    errorsForType.push({ field: name, message: 'Value must be a boolean' });
                 }
                 break;
             case 'date':
                 valueToValidate = dateData || '';
                 if (required && valueToValidate === '') {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Date cannot be empty' });
+                    errorsForType.push({ field: name, message: 'Date cannot be empty' });
                 }
-                else if (valueToValidate !== '' && !ajv.validate(schemas_1.schemas.date, valueToValidate)) {
+                else if (valueToValidate !== '' && !ajv.validate(schemas.date, valueToValidate)) {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Invalid date format' });
+                    errorsForType.push({ field: name, message: 'Invalid date format' });
                 }
                 break;
             case 'enum':
@@ -149,11 +127,11 @@ function validateInputFields(inputFields) {
                 const enumValuesArray = (enumValues || '').split(',').map((v) => v.trim());
                 if (required && valueToValidate === '') {
                     isValidForType = false;
-                    errorsForType.push({ message: 'Value cannot be empty' });
+                    errorsForType.push({ field: name, message: 'Value cannot be empty' });
                 }
                 else if (valueToValidate !== '' && !enumValuesArray.includes(valueToValidate)) {
                     isValidForType = false;
-                    errorsForType.push({ message: `Value must be one of: ${enumValuesArray.join(', ')}` });
+                    errorsForType.push({ field: name, message: `Value must be one of: ${enumValuesArray.join(', ')}` });
                 }
                 break;
         }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ValidatorNode = void 0;
+const n8n_workflow_1 = require("n8n-workflow");
 const validateInput_1 = require("./validateInput");
 class ValidatorNode {
     constructor() {
@@ -13,10 +14,28 @@ class ValidatorNode {
             defaults: {
                 name: 'Validator Node',
             },
-            icon: "file:validation.svg",
+            icon: 'file:validation.svg',
             inputs: ['main'],
             outputs: ['main'],
             properties: [
+                {
+                    displayName: 'Node Mode',
+                    name: 'nodeMode',
+                    type: 'options',
+                    options: [
+                        {
+                            name: 'Output Validation Results',
+                            value: 'output-validation',
+                            description: 'Node will output validation results'
+                        },
+                        {
+                            name: 'Output Items',
+                            value: 'output-items',
+                            description: 'Node will output items from input and error on validation failure'
+                        }
+                    ],
+                    default: 'output-validation',
+                },
                 {
                     displayName: 'Inputs',
                     name: 'inputs',
@@ -211,16 +230,36 @@ class ValidatorNode {
     }
     async execute() {
         const items = this.getInputData();
+        const outputMode = this.getNodeParameter('nodeMode', 0);
+        const returnData = [];
         for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
             const item = items[itemIndex];
             const inputFields = this.getNodeParameter('inputs.inputFields', itemIndex, []);
             const { isValid, errors } = (0, validateInput_1.validateInputFields)(inputFields);
-            item.json = {
-                isValid,
-                errors: errors.length ? errors : undefined,
-            };
+            if (outputMode === 'output-items') {
+                if (isValid) {
+                    returnData.push(item);
+                }
+                else {
+                    let errorOutput = '';
+                    for (let i = 0; i < errors.length; i++) {
+                        if (errorOutput) {
+                            errorOutput += ' | ';
+                        }
+                        errorOutput += `${errors[i].field}: ${errors[i].message}`;
+                    }
+                    throw new n8n_workflow_1.NodeOperationError(this.getNode(), `Item failed validation. ${errorOutput}`);
+                }
+            }
+            else {
+                item.json = {
+                    isValid,
+                    errors: errors.length ? errors : undefined,
+                };
+                returnData.push(item);
+            }
         }
-        return this.prepareOutputData(items);
+        return this.prepareOutputData(returnData);
     }
 }
 exports.ValidatorNode = ValidatorNode;
