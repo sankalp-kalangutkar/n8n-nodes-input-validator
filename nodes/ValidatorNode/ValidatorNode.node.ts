@@ -3,6 +3,7 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	NodeOperationError,
 } from 'n8n-workflow';
 import { validateInputFields } from './validateInput';
 import { InputField } from './types';
@@ -21,6 +22,24 @@ export class ValidatorNode implements INodeType {
 		inputs: ['main'],
 		outputs: ['main'],
 		properties: [
+			{
+				displayName: 'Node Mode',
+				name: 'nodeMode',
+				type: 'options',
+				options: [
+					{
+						name: 'Output Validation Results',
+						value: 'output-validation',
+						description: 'Node will output validation results'
+					},
+					{
+						name: 'Output Items',
+						value: 'output-items',
+						description: 'Node will output items from input and error on validation failure'
+					}
+				],
+				default: 'output-validation',
+			},
 			{
 				displayName: 'Inputs',
 				name: 'inputs',
@@ -218,6 +237,9 @@ export class ValidatorNode implements INodeType {
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
 
+		const outputMode = this.getNodeParameter('nodeMode', 0);
+
+        const returnData: INodeExecutionData[] = [];
 		for (let itemIndex = 0; itemIndex < items.length; itemIndex++) {
 			const item: INodeExecutionData = items[itemIndex];
 			const inputFields = this.getNodeParameter(
@@ -228,12 +250,30 @@ export class ValidatorNode implements INodeType {
 
 			const { isValid, errors } = validateInputFields(inputFields);
 
-			item.json = {
-				isValid,
-				errors: errors.length ? errors : undefined,
-			};
+			if (outputMode === 'output-items') {
+				if (isValid) {
+					// If item is valid leave it as is
+					returnData.push(item);
+				} else {
+					// output error
+					let errorOutput = '';
+					for (let i = 0; i < errors.length; i++){
+						if (errorOutput) {
+							errorOutput += ' | ';
+						}
+						errorOutput += `${errors[i].field}: ${errors[i].message}`;
+					}
+					throw new NodeOperationError(this.getNode(), `Item failed validation. ${errorOutput}`);
+				}
+			} else {
+				item.json = {
+					isValid,
+					errors: errors.length ? errors : undefined,
+				};
+				returnData.push(item);
+			}
 		}
 
-		return this.prepareOutputData(items);
+		return this.prepareOutputData(returnData);
 	}
 }
